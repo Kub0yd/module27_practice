@@ -1,4 +1,6 @@
+<?php 
 
+?>
     <form method="post">
       <h2>Авторизация</h2>
       <label for="username">Имя пользователя:</label>

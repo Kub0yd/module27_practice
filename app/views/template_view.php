@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,12 +13,12 @@
         <div class="container-fluid">
             <!-- логотип -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Gallery</a>
+                <a class="navbar-brand" href="./">Gallery</a>
             </div>
             <!-- вывод кнопок в зависимости от проверки на авторизацию -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                <?php if (!$auth) {?>
+                <?php if (!$_SESSION['auth']) {?>
                 <li><a href="./index.php?url=login" class="btn btn-secondary">Войти</a></li>
                 <?php } else {?>
                 <form action="./" method="post">
