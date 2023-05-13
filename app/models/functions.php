@@ -74,6 +74,7 @@ function unsetAll(){
     foreach($_COOKIE as $key => $value) setcookie($key, '', time() - 3600*24*30*12, '/');
     //setcookie("id", "", time() - 3600*24*30*12, "/");
     //setcookie("hash", "", time() - 3600*24*30*12, "/", null, null, true); // httponly !!!
+    // $_POST = [];
     session_unset();
 
 }

@@ -1,13 +1,14 @@
 <?php
 class Controller_Main extends Controller{
+    
+    
     function action_index(){
-        $this->view->generate('main_view.php', 'template_view.php');
-
+        
         // session_start();
         $superUser = false;
         
-        $userDataByHash = getUserByHash($_SESSION['hash']);
-        echo "<script>alert(\"class\");</script>";
+        // $userDataByHash = getUserByHash($_SESSION['hash']);
+        // echo "<script>alert(\"class\");</script>";
         //проверяем пришедшие со страницы аутентификации куки
         if (isset($_COOKIE['id']) and isset($_COOKIE['hash'])) {
             //получаем информацию о юзере через id
@@ -21,28 +22,33 @@ class Controller_Main extends Controller{
                 echo "<script>alert(\"Что-то пошло не так с авторизацией.. Попробуйте повторить вход\");</script>";
                 // header('Location: ?=login');          
             }else{
-                echo "<script>alert(\"cookie\");</script>";
+                // echo "<script>alert(\"cookie\");</script>";
                 //ставим отметку авторизованного пользователя
                 // $_SESSION['auth']  = 1;
                 $_SESSION['auth']  = true;
                 //echo $userId;
             }
-        }
-        if(!(isset($_SESSION['hash']) and !!($userDataByHash['login']))){
+        }else if (isset($_SESSION['hash'])) {
+            $userDataByHash = getUserByHash($_SESSION['hash']);
+            if(!($userDataByHash['login'])){
+        // if(!(isset($_SESSION['hash']) and !!($userDataByHash['login']))){
             echo "<script>alert(\"Что-то пошло не так с авторизацией.. Попробуйте повторить вход\");</script>";
             // header('Location: ./index.php?=login');       
-            
-        }else {
-                //ставим отметку авторизованного пользователя
-                $_SESSION['auth']  = true;
-                //echo $userId;
+            }else {
+                    //ставим отметку авторизованного пользователя
+                    $_SESSION['auth']  = true;
+                    //echo $userId;
 
+            }
         }
         if(isset($_POST['sign_out'])) {
-            echo "<script>alert(\"fsfsfsf\");</script>";
+            // echo "<script>alert(\"fsfsfsf\");</script>";
             unsetAll();
-            header("Location: ./"); exit();
+            // header("Location: ./"); 
         }
+        
+        $this->view->generate('main_view.php', 'template_view.php');
     }
+    
 }
 ?>
