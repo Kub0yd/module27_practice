@@ -1,6 +1,6 @@
 <?php 
 class Route {
-	public $db;
+	// public $db;
     public static function start(){
 		include "app/models/db_conf.php";
         //контроллер и действие по умолчанию
@@ -42,7 +42,7 @@ class Route {
 		if(method_exists($controller, $action))
 		{
 			// вызываем действие контроллера
-			$controller->$action($db);
+			$controller->$action();
 		}
 		else
 		{

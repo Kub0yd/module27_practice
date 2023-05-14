@@ -1,11 +1,12 @@
 <?php
-// include './app/config.php';
+require_once 'app/models/functions.php';
+// require_once 'app/models/db_conf.php';
+// include './app/models/db_conf.php';
 class Controller_Login extends Controller {
 
-    function action_index($db){
+    function action_index(){
         $this->view->generate('login_view.php', 'template_view.php');
-
-        // session_start();
+        $db = DbConn::connect();
         $auth = $_SESSION['auth'] ?? null;
         if ($auth) {
             header("Location: ./");
@@ -15,18 +16,18 @@ class Controller_Login extends Controller {
            $login = $_POST['username'];
            $password = $_POST['password'];
           
-           if(password_verify($password, getUserPassword($login)))
+           if(password_verify($password, Functions::getUserPassword($login)))
            {
              // Генерируем случайное число и шифруем его
-             $hash = md5(generateCode(10));
+             $hash = md5(Functions::generateCode(10));
             
              // Записываем в БД новый хеш авторизации и IP
-             $db->query("UPDATE users SET user_hash='".$hash."' WHERE id='".getUserId($login)."'"); 
+             $db->query("UPDATE users SET user_hash='".$hash."' WHERE id='".Functions::getUserId($login)."'"); 
 
              // Ставим куки
              if ((isset($_POST["saveCookie"])))
              {
-               setcookie("id", getUserId($login), time()+60*60*24*30, "/");
+               setcookie("id", Functions::getUserId($login), time()+60*60*24*30, "/");
                setcookie("hash", $hash, time()+60*60*24*30, "/", null, null, true); // httponly !!! 
                // Переадресовываем браузер на страницу проверки нашего скрипта
                //$_SESSION['auth'] = true; 
@@ -36,7 +37,7 @@ class Controller_Login extends Controller {
               //  setcookie("id", getUserId($login), mktime(0), "/");
               //  setcookie("hash", $hash, mktime(0), "/", null, null, true); // httponly !!! 
                // Переадресовываем браузер на страницу проверки нашего скрипта
-               $_SESSION['hash'] = getUserHash($login);
+               $_SESSION['hash'] = Functions::getUserHash($login);
               //  header("Location: ./index.php");
              }    
              
