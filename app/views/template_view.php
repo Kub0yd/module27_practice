@@ -3,7 +3,7 @@
 <html>
 <head>
   <title>Моя галерея изображений</title>
-  <link rel="stylesheet" href="style/index.css" />
+  <link rel="stylesheet" href="app/style/index.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     
@@ -20,6 +20,7 @@
                 <ul class="nav navbar-nav navbar-right">
                 <?php if (!$_SESSION['auth']) {?>
                 <li><a href="./index.php?url=login" class="btn btn-secondary">Войти</a></li>
+                <li><a href="./index.php?url=registration" class="btn btn-secondary">Зарегистрироваться</a></li>
                 <?php } else {?>
                 <form action="./" method="post">
                 <button type="submit" class="btn btn-primary" name="sign_out" id="logo" formaction="index.php">ВЫЙТИ</button>

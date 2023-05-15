@@ -16,7 +16,11 @@ class DbConn {
    
 }
 class Functions {
-
+    private $db;
+      
+    public function __construct($db) {
+      $this->db = $db;
+    }
     //генерация случйного кода
     public function generateCode($length=6) {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
@@ -28,12 +32,12 @@ class Functions {
         return $code;
     } 
     //получаем все записи пользователя по логину
-    public static function getUserByLogin($login, $db){
+    public function getUserByLogin($login){
         // include "db_conf.php";
         
-        $login = $db->quote($login);
+        $login = $this->db->quote($login);
         $sql = "SELECT id, password, user_hash FROM users WHERE login = $login";
-        $result = $db->query($sql)->FETCH(PDO::FETCH_ASSOC);
+        $result = $this->db->query($sql)->FETCH(PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -42,7 +46,7 @@ class Functions {
         // include "db_conf.php";
         if ($hash){
         $sql = "SELECT id, password, login FROM users WHERE user_hash = '$hash'";
-            $result = $db->query($sql)->FETCH(PDO::FETCH_ASSOC); 
+            $result = $this->db->query($sql)->FETCH(PDO::FETCH_ASSOC); 
         }else {
             exit();
         }
@@ -52,29 +56,29 @@ class Functions {
     public function getUserById($id){
         // include "db_conf.php";
 
-        $id = $db->quote($id);
+        $id = $this->db->quote($id);
         $sql = "SELECT id, login, password, user_hash FROM users WHERE id = $id";
-        $result = $db->query($sql)->FETCH(PDO::FETCH_ASSOC);
+        $result = $this->db->query($sql)->FETCH(PDO::FETCH_ASSOC);
 
         return $result;
     }
     //получаем пароль пользователя по логину
-    public static function getUserPassword($login){
+    public function getUserPassword($login){
 
-        $result = self::getUserByLogin($login,$db);
+        $result = self::getUserByLogin($login);
         return $result['password'];
     }
     //получаем id пользователя по логину
     public function getUserId($login){
 
-        $result = getUserByLogin($login);
+        $result = self::getUserByLogin($login);
 
         return $result['id'];
     }
     //получаем хэш пользователя по логину
     public function getUserHash($login){
 
-        $result = getUserByLogin($login);
+        $result =self::getUserByLogin($login);
 
         return $result['user_hash'];
     }
@@ -83,7 +87,7 @@ class Functions {
         // include "db_conf.php";
 
         $sql = "SELECT id, user_id, filename, upload_date FROM files WHERE filename = '$filename'";
-        $result = $db->query($sql)->FETCH(PDO::FETCH_ASSOC);
+        $result = $this->db->query($sql)->FETCH(PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -101,7 +105,7 @@ class Functions {
         // include "db_conf.php";
 
         $sql = "SELECT id, user_id, comment, create_date FROM comments WHERE file_id = '$id'";
-        $result = $db->query($sql)->FETCHALL(PDO::FETCH_ASSOC);
+        $result = $this->db->query($sql)->FETCHALL(PDO::FETCH_ASSOC);
 
         return $result;
     }
@@ -110,7 +114,13 @@ class Functions {
         // include "db_conf.php";
 
         $sql = "SELECT id, login FROM users";
-        $result = $db->query($sql)->FETCHALL(PDO::FETCH_ASSOC);
+        $result = $this->db->query($sql)->FETCHALL(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+    public function getVkUser($userid){
+        $sql = "SELECT id, user_id, token FROM vk_users WHERE user_id = '$userid'";
+        $result = $this->db->query($sql)->FETCH(PDO::FETCH_ASSOC);
 
         return $result;
     }
