@@ -17,7 +17,7 @@
 
     * [Controllers](./app/controllers/) - контроллеры проекта для каждой страницы сайта
         * [controller_auth](./app/controllers/controller_auth.php) - контроллер страницы для авторизванных пользователей
-        * [controller_login.php](./app/controllers/controller_feedback.php) - контроллер страницы авторизации
+        * [controller_login.php](./app/controllers/controller_login.php) - контроллер страницы авторизации
         * [controller_main.php](./app/controllers/controller_main.php) - контроллер главной страницы 
         * [controller_registration.php](./app/controllers/controller_registration.php) - контроллер страницы регистрации
     * [core](./app/core/) - базовые файлы model, View и Controller с соответствующими классами.
@@ -39,7 +39,7 @@
         * [main_view.php](./app/views/main_view.php) - код представления основной страницы
         * [registration_view.php](./app/views/registration_view.php) - код представления страницы регистрации
         * [template_view.php](./app/views/template_view.php) - шаблон сайта
-    * [boot.php](./app/bootstrap.php) - подгрузчик компонентов
+    * [boot.php](./app/boot.php) - подгрузчик компонентов
 * [vendor.php](./vendor/) - внешние компоненты
 * [0auth.php](./0auth.php) - файл обработчик авторизации ВК
 * [auth.sql](./auth.sql) - база данных для импорта
