@@ -7,36 +7,22 @@ class Controller_Registration extends Controller {
 
     function action_index(){
 
-        //Авторизация VK
-        // Параметры приложения
-        // $clientId     = '51639289'; // ID приложения
-        $clientId     = '51624420'; // ID приложения
-        // $clientId     = '51639321'; // ID приложения 3
-        // $clientSecret = 'fAApz32aq1tMEoWXe9jd'; // Защищённый ключ
-        $clientSecret = 'S4iTqXVQ2chUHeTsPs8T'; // Защищённый ключ testapi
-        // $clientSecret = 'sVBvJ0uphHYNpCzgqIxx'; // Защищённый ключ 3
-        // $redirectUri  = 'https://kubtech.ru/oauth.php'; // Адрес, на который будет переадресован пользователь после прохождения авторизации
-        $redirectUri  = 'http://localhost/module27_practice/0auth.php';
-        // Формируем ссылку для авторизации
-        $data = array(
-          'client_id'     => $clientId,
-          'redirect_uri'  => $redirectUri,
-          'response_type' => 'code',
-          'v'             => '5.126', // (обязательный параметр) версиb API https://vk.com/dev/versions
-        
-          // Права доступа приложения https://vk.com/dev/permissions
-          // Если указать "offline", полученный access_token будет "вечным" (токен умрёт, если пользователь сменит свой пароль или удалит приложение).
-          // Если не указать "offline", то полученный токен будет жить 12 часов.
-          'scope'         => 'photo,offline',
-        );
-        
+         //подгружаем данные из модели
+        $this->model = new Model_Registration();  
+        $data = $this->model->get_data();
+
         $this->view->generate('registration_view.php', 'template_view.php', $data);
+
+        //подключаем БД и обработчики
         $db = DbConn::connect();
         $heandler = new Functions($db);
+
+        //переадресация, если пользователь уже авторизован
         $auth = $_SESSION['auth'] ?? null;
         if ($auth) {
             header("Location: ./index.php?url=auth");
         }
+        //обработка регистрации
         if(isset($_POST['registration'])){   
             $err = [];
             // проверяем логин
@@ -58,12 +44,14 @@ class Controller_Registration extends Controller {
             // Если нет ошибок, то добавляем в БД нового пользователя
             if(count($err) == 0)
             {
+            //создаем обрабочтик ролей
             $roleManager = new UserRoleManager($db);
             $username = $db->quote($_POST['username']);
             // Убираем лишние пробелы и делаем хэширование
             $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
             $sql = "INSERT INTO users (login, password) VALUES ($username, '$password' )";
             $db->query($sql);
+            //после добавления пользователя в бд назначеем ему роль
             $roleManager->assignRole($heandler->getUserId($_POST['username'], $db), $roleManager->getRoleId("user"), null);
             echo "<script>alert(\"Вы успешно зарегистрировались!\");</script>";
             header("Location: ./index.php?url=login");

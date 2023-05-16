@@ -31,24 +31,25 @@ if (isset($response->error)) {
 $token = $response->access_token; // Токен
 $expiresIn = $response->expires_in; // Время жизни токена
 $userId = $response->user_id; // ID авторизовавшегося пользователя
-// echo var_dump($response);
+
 // Сохраняем токен в сессии
 $_SESSION['vk_token'] = $token;
 if (isset($_SESSION['vk_token'])){
+    //если есть все прошло хорошо ставим отметку авторизации
     $_SESSION['auth'] =true;
 
     $db = DbConn::connect();
     $rolemanager = new UserRoleManager($db);
     $handler = new Functions($db);
-
+    //проверяем, записан ли пользователь ВК в базу
     $query = $db->query("SELECT id FROM vk_users WHERE user_id=$userId");
     if($query->rowCount() < 1){
-
+        //если не записан, то добавляем в бд id и токен
         $stmt = $db->prepare("INSERT INTO vk_users (user_id, token) VALUES ($userId, '$token')");
         $stmt -> execute();
         $vkUser = $handler->getVkUser($userId);
+        //а потом назначем роль из vk_user
         $defaultRoleId = $rolemanager->getRoleId("vk_user");
-
         $rolemanager->assignRole(NULL, $rolemanager->getRoleId("vk_user"), $vkUser['id']); 
     }
     

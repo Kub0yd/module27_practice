@@ -5,17 +5,16 @@ class Controller_Main extends Controller{
     
     function action_index(){
 
-        
-        // $superUser = false;
+        //подключаем БД и обработчики
         $db = DbConn::connect();
         $heandler = new Functions($db);
- 
+        //обработка кнопки "ВЫЙТИ"
         if(isset($_POST['sign_out'])) {
-            // echo "<script>alert(\"fsfsfsf\");</script>";
+            //стираем все куки и сессии
             $heandler->unsetAll();
-            // header("Location: ./"); 
+
         }
-      
+        //переадресация, если пользователь уже авторизован
         if ($_SESSION['auth']){
             header("Location: ./index.php?url=auth");
             exit();

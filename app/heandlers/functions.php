@@ -6,8 +6,7 @@ class DbConn {
     public static function connect()
     {
         $host = 'localhost';
-        $db = 'u2038502_default';
-        // $user = "u2038502_default";
+        $db = 'auth';
         $user = "root";
         $password = "";
         $db = new PDO("mysql:host=$host;dbname=$db", $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
@@ -118,36 +117,37 @@ class Functions {
 
         return $result;
     }
+    //получаем пользователя VK
     public function getVkUser($userid){
         $sql = "SELECT id, user_id, token FROM vk_users WHERE user_id = '$userid'";
         $result = $this->db->query($sql)->FETCH(PDO::FETCH_ASSOC);
 
         return $result;
     }
-    public function isAdmin($usernameRoles){
-        if (in_array("Administrator", $usernameRoles)){
-            $isAdmin = 'checked';
-        } else {
-            $isAdmin = "";
-        }
-        return $isAdmin;
-    }
-    public function isUser($usernameRoles){
-        if (in_array("moderator", $usernameRoles)){
-            $isUser = 'checked';
-        } else {
-            $isUser = "";
-        }
-        return $isUser;
-    }    
-    public function isModerator($usernameRoles){
-        if (in_array("user", $usernameRoles)){
-            $isModerator = 'checked';
-        } else {
-            $isModerator = "";
-        }
-        return $isModerator;
-    }   
+    // public function isAdmin($usernameRoles){
+    //     if (in_array("Administrator", $usernameRoles)){
+    //         $isAdmin = 'checked';
+    //     } else {
+    //         $isAdmin = "";
+    //     }
+    //     return $isAdmin;
+    // }
+    // public function isUser($usernameRoles){
+    //     if (in_array("moderator", $usernameRoles)){
+    //         $isUser = 'checked';
+    //     } else {
+    //         $isUser = "";
+    //     }
+    //     return $isUser;
+    // }    
+    // public function isModerator($usernameRoles){
+    //     if (in_array("user", $usernameRoles)){
+    //         $isModerator = 'checked';
+    //     } else {
+    //         $isModerator = "";
+    //     }
+    //     return $isModerator;
+    // }   
 }
 
 ?>
